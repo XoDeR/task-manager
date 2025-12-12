@@ -1,18 +1,24 @@
 import type { Task } from "@/types";
 import { Card, CardContent } from "./ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./ui/accordion";
-import { useUpdateTask } from "@/hooks/useTasks";
+import { useDeleteTask, useUpdateTask } from "@/hooks/useTasks";
 import { Button } from "./ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
-import { PencilIcon } from "lucide-react";
+import { PencilIcon, XIcon } from "lucide-react";
 
 interface Props {
   task: Task;
 }
 
 const TaskItem = ({ task }: Props) => {
-  
   const updateMutation = useUpdateTask();
+  const deleteMutation = useDeleteTask();
+
+  const handleDelete = (articleId: number) => {
+    if (window.confirm("Are you sure you want to delete this task?")) {
+      deleteMutation.mutate(articleId);
+    }
+  };
 
   const changeStatus = (status: number) => {
     updateMutation.mutate(
@@ -51,7 +57,6 @@ const TaskItem = ({ task }: Props) => {
               type="single"
               collapsible
               className="w-3/4 mr-4"
-              defaultValue="item-1"
             >
               <AccordionItem value="item-1">
                 <AccordionTrigger><p className="text-lg text-foreground">{task.title}</p></AccordionTrigger>
@@ -75,6 +80,7 @@ const TaskItem = ({ task }: Props) => {
                     </DropdownMenuItem>))}
                 </DropdownMenuContent>
               </DropdownMenu>
+              <Button variant="destructive" className="mx-4 mt-3" onClick={ () => {handleDelete(task.id)}}><XIcon/></Button>
             </div>
           </div>
       </CardContent>
