@@ -1,8 +1,13 @@
 import { useTasks } from "@/hooks/useTasks";
 import TaskItem from "./TaskItem";
 
-const TaskList = () => {
-  const { data: tasks, isLoading, isError } = useTasks();
+interface Props {
+  filter: number | undefined;
+  sortBy: string;
+}
+
+const TaskList = ({ filter, sortBy }: Props) => {
+  const { data: tasks, isLoading, isError } = useTasks(sortBy, filter);
 
   if (isLoading) return <div>Loading tasks...</div>;
 

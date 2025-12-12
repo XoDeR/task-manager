@@ -2,11 +2,16 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import api from "../api/api";
 import type { Task } from "../types";
 
-export const useTasks = () => {
+export const useTasks = (sortBy: string = "desc", filter?: number) => {
   return useQuery<Task[]>({
-    queryKey: ["tasks"],
+    queryKey: ["tasks", { sortBy, filter }],
     queryFn: async () => {
-      const { data } = await api.get("/tasks");
+      const { data } = await api.get("/tasks", {
+        params: {
+          sortBy,
+          filter,
+        },
+      });
       return data.tasks;
     },
   });

@@ -17,7 +17,19 @@ class TaskController extends Controller
         // are used only with protected routes
         // and the user is inserted by sanctum middleware in the request
         $user = $request->user();
-        $tasks = $user->tasks()->select('id', 'title', 'description', 'status')->get();
+
+        $sortBy = $request->query('sortBy', 'desc');
+        // allow only asc and desc for sortBy
+        if ($sortBy !== 'asc' && $sortBy !== 'desc') $sortBy = 'desc';
+        $filter = $request->query('filter');
+
+        $query = $user->tasks()->select('id', 'title', 'description', 'status', 'updated_at');
+
+        if ($filter !== null) {
+            $query->where('status', $filter);
+        }
+
+        $tasks = $query->orderBy('updated_at', $sortBy)->get();
 
         return response()->json([
             'tasks' => $tasks,
