@@ -1,5 +1,6 @@
 import { Modal } from "@/components/Modal";
 import TaskCreateForm from "@/components/TaskCreateForm";
+import TaskList from "@/components/TaskList";
 import { Button } from "@/components/ui/button";
 import useAuthStore from "@/stores/authStore";
 import { useState } from "react";
@@ -35,6 +36,7 @@ const Tasks = () => {
           </div>
         </div>
       </div>
+      <TaskList/>
       <Modal
         open={creatingTask}
         onOpenChange={setCreatingTask}
